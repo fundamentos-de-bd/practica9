@@ -9,12 +9,14 @@ INSERT ALL
 
 -- Sucursal
 INSERT INTO sucursal 
-    VALUES ('1990/07/19', 'Vidon', '36', '60691', 'IL');
+    VALUES ('1990/07/19', 'Vidon', '36', '60691', 'CMX');
+    
+INSERT INTO sucursal 
+    VALUES ('2000/01/25', 'Golondrina', '5', '73167', 'VER');
 
 INSERT INTO tener_departamento
-    SELECT *
-        FROM sucursal, tipo_departamento
-        WHERE sucursal.id_sucursal = 0;
+    SELECT id_sucursal, tipo
+        FROM sucursal, tipo_departamento;
 
 -- Personas
 -- Nota: cambiar el formato de las fechas
@@ -35,11 +37,8 @@ INSERT ALL
 INSERT INTO empleado 
     SELECT curp, 'A', 'CAJERO' 
         FROM persona 
-        WHERE ROWNUM <= 3;
-
-INSERT ALL
-    INTO sueldo VALUES(id_tipo_dep, puesto, )
+        WHERE ROWNUM <= 6;
     
 UPDATE empleado 
     SET puesto = 'GERENTE'
-    WHERE curp = '90-9133657';
+    WHERE curp = '90-9133657' or curp = '16-4012688';
