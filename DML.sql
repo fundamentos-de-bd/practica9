@@ -83,3 +83,21 @@ SELECT nombre, ((CURRENT_DATE - fecha_nac)/365.25) edad, num_trabajos
 -- 4. Conocer los productos que se venden dentro de cada sucursal, para esto se debe
 -- regresar el identificados de la sucursal, seguido del identificador del producto y
 -- la descripción de éste.
+-- Nota: hay que cambiar el esquema para poder ahcer esta consulta.
+SELECT id_sucursal, id_producto, descripción
+    FROM instancia_producto
+    GROUP BY id_sucursal, id_producto;
+
+-- 5. Conocer cuales son TODOS los productos que se tienen en cada uno de los
+-- departamentos de las diferentes sucursales.
+SELECT id_producto, id_departamento
+    FROM instancia_producto
+    GROUP BY id_departamento
+    WHERE id_departamento NOT NULL;
+
+-- 6. Conocer cuál es la sucursal con mayor número de productos registrados en sus
+-- diferentes departamentos.
+-- Nota: hay que cambiar el esquema para poder ahcer esta consulta.
+SELECT id_sucursal, MAX(COUNT(id_producto))
+    FROM instancia_producto
+    GROUP BY id_sucursal;
