@@ -16,7 +16,7 @@ ALTER TABLE producto
     ADD CONSTRAINT ck_es_refrigerado
     CHECK (es_refrigerado IN (0, 1));
     
--- Creando tabla para la relacón de Medicamento
+-- Creando tabla para la relacï¿½n de Medicamento
 CREATE TABLE medicamento (
     id_prod NUMBER(10) NOT NULL,
     nombre VARCHAR(100) NOT NULL,
@@ -39,7 +39,7 @@ ALTER TABLE medicamento
     ADD CONSTRAINT ck_es_controlado
     CHECK (es_controlado IN (0, 1));
     
--- Creando tabla para la relación Compuestos
+-- Creando tabla para la relaciï¿½n Compuestos
 CREATE TABLE compuestos (
     sustancia VARCHAR(100) NOT NULL,
     nombre VARCHAR(100) NOT NULL,
@@ -53,7 +53,7 @@ ALTER TABLE compuestos
     ON DELETE CASCADE
     ON UPDATE CASCADE;
     
--- Creando la tabla para la relación de Lote
+-- Creando la tabla para la relaciï¿½n de Lote
 CREATE TABLE lote (
     codigo_barras NUMBER(20) NOT NULL,
     id_produccion NUMBER(10) NOT NULL,
@@ -70,7 +70,7 @@ ALTER TABLE lote
     ADD CONSTRAINT pk_lote
     PRIMARY KEY (id_produccion);
     
--- Creando tabla para la relación de Tipo Departamento
+-- Creando tabla para la relaciï¿½n de Tipo Departamento
 CREATE TABLE tipo_departamento (
     tipo VARCHAR(100),
     descripcion VARCHAR(500)
@@ -84,7 +84,7 @@ ALTER TABLE tipo_departamento
     ADD CONSTRAINT  ch_tipo_dep_tipo
     CHECK (tipo IN ('VYL', 'F', 'A'));
     
--- Creando la tabla para la relación de Sucursal
+-- Creando la tabla para la relaciï¿½n de Sucursal
 CREATE TABLE sucursal (
     id_sucursal NUMBER(10) GENERATED ALWAYS AS IDENTITY,
     fecha_func DATE DEFAULT CURRENT DATE,
@@ -98,7 +98,7 @@ ALTER TABLE sucursal
     ADD CONSTRAINT pk_sucursal
     PRIMARY KEY (id_sucursal);
     
--- Creando tabla para teléfono de sucursales
+-- Creando tabla para telï¿½fono de sucursales
 CREATE TABLE telefono_sucursal (
     num_tel NUMBER(10) NOT NULL,
     id_sucursal NUMBER(10) NOT NULL
@@ -110,7 +110,7 @@ ALTER TABLE telefono_sucursal
     REFERENCES sucursal(id_sucursal)
     ON DELETE CASCADE;
     
--- Creando tabla para la relación de Tener Departamento
+-- Creando tabla para la relaciï¿½n de Tener Departamento
 CREATE TABLE tener_departamento (
     id_suc NUMBER(10) NOT NULL,
     id_tipo VARCHAR(100) NOT NULL
@@ -145,7 +145,7 @@ ALTER TABLE persona
     ADD CONSTRAINT pk_persona
     PRIMARY KEY (curp);
 
--- Creando tabla para teléfono de personas
+-- Creando tabla para telï¿½fono de personas
 CREATE TABLE telefono_persona (
     num_tel NUMBER(10) NOT NULL,
     curp VARCHAR(12) NOT NULL
@@ -209,7 +209,7 @@ ALTER TABLE email
     ADD CONSTRAINT ch_email
     CHECK (email LIKE '.%[@].%[.].%');
 
--- Tabla para la relación Horario
+-- Tabla para la relaciï¿½n Horario
 CREATE TABLE horario (
     id_tipo_dep VARCHAR(100) NOT NULL,
     puesto VARCHAR(80),
@@ -228,7 +228,7 @@ ALTER TABLE horario
     ON DELETE CASCADE;
 
 
--- Creando tabla para la relación Sueldo
+-- Creando tabla para la relaciï¿½n Sueldo
 CREATE TABLE sueldo (
     id_tipo_dep VARCHAR(100),
     puesto VARCHAR(80),
@@ -285,7 +285,7 @@ ALTER TABLE empleado
     REFERENCES sueldo(id_tipo_dep, puesto, registro)
     ON DELETE SET NULL;
 
--- Creando la tabla para la relación de Trabajar
+-- Creando la tabla para la relaciï¿½n de Trabajar
 CREATE TABLE trabajar (
     id_suc NUMBER(10) NOT NULL,
     id_empleado NUMBER(10) NOT NULL
@@ -303,7 +303,7 @@ ALTER TABLE trabajar
     REFERENCES empleado(id_empleado)
     ON DELETE CASCADE;
    
--- Creando la tabla para la relación de Dirigir sucursal
+-- Creando la tabla para la relaciï¿½n de Dirigir sucursal
 CREATE TABLE dirigir (
     id_suc NUMBER(10) NOT NULL,
     id_empleado NUMBER(10) NOT NULL
@@ -321,7 +321,7 @@ ALTER TABLE dirigir
     REFERENCES empleado(id_empleado)
     ON DELETE CASCADE;
     
--- Creando la tabla para la relación de Supervisar
+-- Creando la tabla para la relaciï¿½n de Supervisar
 CREATE TABLE supervisar (
     id_empleado NUMBER(10) NOT NULL,
     id_suc NUMBER(10) NOT NULL,
@@ -332,7 +332,7 @@ ALTER TABLE supervisar
     ADD CONSTRAINT fk_empleado_supervisar
     FOREIGN KEY (id_empleado)
     REFERENCES empleado (id_empleado)
-    ON DELTE CASCADE;
+    ON DELETE CASCADE;
     
 ALTER TABLE supervisar
     ADD CONSTRAINT fk_dep_supervisar
@@ -343,7 +343,7 @@ ALTER TABLE supervisar
 -- Creando tabla para Venta
 CREATE TABLE venta (
     id_venta NUMBER(10),
-    fecha DATE DEFAULT CURRENT DATE,
+    fecha DATE DEFAULT CURRENT_DATE,
     num_tarjeta NUMBER(10) NOT NULL,
     id_empleado NUMBER(10) NOT NULL
 );
@@ -364,7 +364,7 @@ ALTER TABLE venta
     REFERENCES tarjeta(num_tarjeta)
     ON DELETE SET NULL;
 
--- Creando la tabla para la relación de Tipo de Pago
+-- Creando la tabla para la relaciï¿½n de Tipo de Pago
 CREATE TABLE tipo_pago (
     num_transac NUMBER(10) GENERATED ALWAYS AS IDENTITY,
     id_venta NUMBER(10) NOT NULL
@@ -380,7 +380,7 @@ ALTER TABLE tipo_pago
     ADD CONSTRAINT pk_tipo_pago
     PRIMARY KEY (num_transac);
 
--- Creando la tabla para la relación de Método de Pago
+-- Creando la tabla para la relaciï¿½n de Mï¿½todo de Pago
 CREATE TABLE metodo_pago (
     importe NUMBER(10) DEFAULT 0,
     medio NUMBER(10) NOT NULL,
@@ -416,7 +416,7 @@ ALTER TABLE ticket
     REFERENCES venta(id_venta)
     ON DELETE CASCADE;
 
--- Creando tabla para la relación de canjear ticket
+-- Creando tabla para la relaciï¿½n de canjear ticket
 CREATE TABLE canjear_ticket (
     fecha DATE DEFAULT CURRENT DATE,
     id_ticket NUMBER(10) NOT NULL,
@@ -435,7 +435,7 @@ ALTER TABLE canjear_ticket
     REFERENCES cliente(id_cliente)
     ON DELETE CASCADE;
    
--- Creando tabla para la relación de Instancia Producto
+-- Creando tabla para la relaciï¿½n de Instancia Producto
 CREATE TABLE instancia_producto (
     id_producto NUMBER(10) GENERATED ALWAYS AS IDENTITY,
     codigo_barras NUMBER(20) NOT NULL,

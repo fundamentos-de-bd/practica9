@@ -1,6 +1,6 @@
 -- Insertar
 
--- Cat�logo de tipos de departamento
+-- Cat�logo de tipos de departamento
 INSERT INTO tipo_departamento VALUES(('A'),('F'),('VYL'));
 
 -- Sucursal
@@ -51,3 +51,35 @@ INSERT INTO sueldo
 
 INSERT INTO producto (codigo de barras, precio, cantidad, marca) VALUES ((9270412946, 6.65, '250 gr', 'SIEN')
              ,(1867655713, 7.74, '1 kg', 'BSL'));
+
+-- Consultas
+-- 1. Conocer los datos de las sucursales que tengan más de 15 años.
+SELECT *
+FROM sucursal
+WHERE (CURRENT_DATE - fecha_func)/365.25 > 15;
+
+-- 2. Conocer el puesto, nombre, edad y la fecha en la que inicio a trabajar de todos
+-- los empleados.
+SELECT puesto, nombre, ((CURRENT_DATE - fecha_nac)/365.25) edad, registro fecha_inicio
+FROM empleado NATURAL JOIN persona;
+
+-- 3. Conocer el nombre y edad de todos los empleados que trabajan en mas de una
+-- sucursal.
+SELECT nombre, ((CURRENT_DATE - fecha_nac)/365.25) edad, num_trabajos
+    FROM (
+        (
+            SELECT id_empleado, COUNT(id_sucursal) num_trabajos
+            FROM trabajar
+            GROUP BY id_empleado
+            HAVING COUNT(id_sucursal) > 1
+        ) 
+        NATURAL JOIN 
+        (
+            SELECT nombre, id_empleado, fecha_nac
+            FROM persona JOIN empleado ON empleado.curp = persona.curp
+        ) 
+    );
+
+-- 4. Conocer los productos que se venden dentro de cada sucursal, para esto se debe
+-- regresar el identificados de la sucursal, seguido del identificador del producto y
+-- la descripción de éste.
