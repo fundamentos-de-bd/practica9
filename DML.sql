@@ -8,8 +8,8 @@ INSERT INTO tipo_departamento (tipo) VALUES('VYL');
 
 
 -- Sucursal
-INSERT INTO sucursal(fecha_fun, calle, numero, cp, estado) VALUES('1990/07/19', 'Vidon', '36', '60691', 'CMX');
-INSERT INTO sucursal(fecha_fun, calle, numero, cp, estado) VALUES('2000/01/25', 'Golondrina', '5', '73167', 'VER');
+INSERT INTO sucursal (fecha_func, calle, numero, cp, estado) VALUES(TO_DATE('1990/07/19','yyyy-mm-dd'), 'Vidon', '36', '60691', 'CMX');
+INSERT INTO sucursal (fecha_func, calle, numero, cp, estado) VALUES(TO_DATE('2000/01/25','yyyy-mm-dd'), 'Golondrina', '5', '73167', 'VER');
 
 
 INSERT INTO tener_departamento
