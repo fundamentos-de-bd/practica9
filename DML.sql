@@ -1,12 +1,15 @@
 -- Insertar
 
+
 -- Cat�logo de tipos de departamento
-INSERT INTO tipo_departamento VALUES(('A'),('F'),('VYL'));
+INSERT INTO tipo_departamento (tipo) VALUES('A');
+INSERT INTO tipo_departamento (tipo) VALUES('F');
+INSERT INTO tipo_departamento (tipo) VALUES('VYL');
+
 
 -- Sucursal
-INSERT INTO sucursal 
-    VALUES (('1990/07/19', 'Vidon', '36', '60691', 'CMX'), ('2000/01/25', 'Golondrina', '5', '73167', 'VER'));
-
+INSERT INTO sucursal VALUES('1990/07/19', 'Vidon', '36', '60691', 'CMX');
+INSERT INTO sucursal VALUES('2000/01/25', 'Golondrina', '5', '73167', 'VER');
 
 
 INSERT INTO tener_departamento
