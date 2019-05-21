@@ -14,17 +14,16 @@ INSERT INTO tener_departamento
         FROM sucursal, tipo_departamento;
 
 -- Personas
--- Nota: cambiar el formato de las fechas
-INSERT INTO persona VALUES(('90-9133657', 'Arlin', 'Fairweather', 'Llewelyn', '04/07/1998'),
-                           ('16-4012688', 'Garwood', 'Askell', 'Stocks', '05/05/1987'),
-                           ('93-6630973', 'Dionisio', 'Iddons', 'Constant', '12/05/1987'),
-                           ('29-8748557', 'Prudi', 'Dekeyser', 'Phillpot', '09/12/1997'),
-                           ('82-4204994', 'Quentin', 'Leither', 'Ferretti', '05/24/1991'),             
-                           ('45-8775495', 'Electra', 'Alred', 'd''Escoffier', '01/31/1990'),
-                           ('46-4561160', 'Hatty', 'Dunckley', 'Arkill', '12/08/1999'),
-                           ('96-8795930', 'Ev', 'Smith', 'Onians', '05/12/1989'),
-                           ('79-9657119', 'Xymenes', 'Ullyott', 'Joska', '07/20/1992'),
-                           ('79-9115120', 'Efrem', 'Bourthouloume', 'MacLardie', '02/10/2000'));
+INSERT INTO persona VALUES ('90-9133657', 'Arlin', 'Fairweather', 'Llewelyn', TO_DATE('04/07/1998''yyyy-mm-dd'));
+INSERT INTO persona VALUES ('16-4012688', 'Garwood', 'Askell', 'Stocks', TO_DATE('05/05/1987''yyyy-mm-dd'));
+INSERT INTO persona VALUES ('93-6630973', 'Dionisio', 'Iddons', 'Constant', TO_DATE('12/05/1987''yyyy-mm-dd'));
+INSERT INTO persona VALUES ('29-8748557', 'Prudi', 'Dekeyser', 'Phillpot', TO_DATE('09/12/1997''yyyy-mm-dd'));
+INSERT INTO persona VALUES ('82-4204994', 'Quentin', 'Leither', 'Ferretti', TO_DATE('05/24/1991''yyyy-mm-dd'));
+INSERT INTO persona VALUES ('45-8775495', 'Electra', 'Alred', 'd''Escoffier', TO_DATE('01/31/1990''yyyy-mm-dd'));
+INSERT INTO persona VALUES ('46-4561160', 'Hatty', 'Dunckley', 'Arkill', TO_DATE('12/08/1999''yyyy-mm-dd'));
+INSERT INTO persona VALUES ('96-8795930', 'Ev', 'Smith', 'Onians', TO_DATE('05/12/1989''yyyy-mm-dd'));
+INSERT INTO persona VALUES ('79-9657119', 'Xymenes', 'Ullyott', 'Joska', TO_DATE('07/20/1992''yyyy-mm-dd'));
+INSERT INTO persona VALUES ('79-9115120', 'Efrem', 'Bourthouloume', 'MacLardie', TO_DATE('02/10/2000''yyyy-mm-dd'));
 
 -- Empleados
 INSERT INTO empleado 
@@ -49,19 +48,19 @@ INSERT INTO sueldo
         WHERE puesto = 'GERENTE'; 
 
 
-INSERT INTO producto (codigo de barras, precio, cantidad, marca) VALUES ((9270412946, 6.65, '250 gr', 'SIEN')
-             ,(1867655713, 7.74, '1 kg', 'BSL'));
+INSERT INTO producto (codigo de barras, precio, cantidad, marca) VALUES (9270412946, 6.65, '250 gr', 'SIEN');
+INSERT INTO producto (codigo de barras, precio, cantidad, marca) VALUES (1867655713, 7.74, '1 kg', 'BSL');
 
 -- Consultas
 -- 1. Conocer los datos de las sucursales que tengan más de 15 años.
 SELECT *
-FROM sucursal
-WHERE (CURRENT_DATE - fecha_func)/365.25 > 15;
+    FROM sucursal
+    WHERE (CURRENT_DATE - fecha_func)/365.25 > 15;
 
 -- 2. Conocer el puesto, nombre, edad y la fecha en la que inicio a trabajar de todos
 -- los empleados.
 SELECT puesto, nombre, ((CURRENT_DATE - fecha_nac)/365.25) edad, registro fecha_inicio
-FROM empleado NATURAL JOIN persona;
+    FROM empleado NATURAL JOIN persona;
 
 -- 3. Conocer el nombre y edad de todos los empleados que trabajan en mas de una
 -- sucursal.
