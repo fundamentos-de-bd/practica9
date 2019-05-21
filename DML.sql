@@ -37,6 +37,28 @@ INSERT INTO persona (curp, nombre, apellido_p, apellido_m, fecha_nac) VALUES
 INSERT INTO persona (curp, nombre, apellido_p, apellido_m, fecha_nac) VALUES 
 ('TNAE291127HOC02613', 'Garrard', 'Krout', 'Mathiassen', TO_DATE('2018-08-01 01:38:28', 'yyyy-mm-dd hh24:mi:ss'));
 -- Empleados
+
+INSERT INTO horario
+
+    SELECT tipo, 'CAJERO', '0480', '1933'
+
+        FROM tipo_departamento;
+
+
+
+INSERT INTO sueldo
+
+    SELECT id_tipo_dep, puesto, CURRENT_DATE, 10000
+
+        FROM horario
+
+        WHERE puesto = 'CAJERO';
+
+INSERT INTO sueldo
+    SELECT tipo_departamento, puesto, registro, 20000
+        FROM empleado
+        WHERE puesto = 'GERENTE'; 
+                                                                 
 INSERT INTO empleado 
     SELECT curp, 'A', 'CAJERO' 
         FROM persona 
@@ -46,17 +68,6 @@ INSERT INTO empleado
 UPDATE empleado 
     SET puesto = 'GERENTE'
     WHERE curp = '90-9133657' or curp = '16-4012688';
-
-
-INSERT INTO sueldo
-    SELECT tipo_departamento, puesto, registro, 10000
-        FROM empleado
-        WHERE puesto = 'CAJERO';
-
-INSERT INTO sueldo
-    SELECT tipo_departamento, puesto, registro, 20000
-        FROM empleado
-        WHERE puesto = 'GERENTE'; 
 
 
 INSERT INTO producto (codigo de barras, precio, cantidad, marca) VALUES (9270412946, 6.65, '250 gr', 'SIEN');
