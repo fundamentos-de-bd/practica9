@@ -8,26 +8,34 @@ INSERT INTO tipo_departamento (tipo) VALUES('VYL');
 
 
 -- Sucursal
-INSERT INTO sucursal VALUES('1990/07/19', 'Vidon', '36', '60691', 'CMX');
-INSERT INTO sucursal VALUES('2000/01/25', 'Golondrina', '5', '73167', 'VER');
+INSERT INTO sucursal(fecha_fun, calle, numero, cp, estado) VALUES('1990/07/19', 'Vidon', '36', '60691', 'CMX');
+INSERT INTO sucursal(fecha_fun, calle, numero, cp, estado) VALUES('2000/01/25', 'Golondrina', '5', '73167', 'VER');
 
 
 INSERT INTO tener_departamento
     SELECT id_sucursal, tipo
         FROM sucursal, tipo_departamento;
 
--- Personas
-INSERT INTO persona VALUES ('90-9133657', 'Arlin', 'Fairweather', 'Llewelyn', TO_DATE('04/07/1998''yyyy-mm-dd'));
-INSERT INTO persona VALUES ('16-4012688', 'Garwood', 'Askell', 'Stocks', TO_DATE('05/05/1987''yyyy-mm-dd'));
-INSERT INTO persona VALUES ('93-6630973', 'Dionisio', 'Iddons', 'Constant', TO_DATE('12/05/1987''yyyy-mm-dd'));
-INSERT INTO persona VALUES ('29-8748557', 'Prudi', 'Dekeyser', 'Phillpot', TO_DATE('09/12/1997''yyyy-mm-dd'));
-INSERT INTO persona VALUES ('82-4204994', 'Quentin', 'Leither', 'Ferretti', TO_DATE('05/24/1991''yyyy-mm-dd'));
-INSERT INTO persona VALUES ('45-8775495', 'Electra', 'Alred', 'd''Escoffier', TO_DATE('01/31/1990''yyyy-mm-dd'));
-INSERT INTO persona VALUES ('46-4561160', 'Hatty', 'Dunckley', 'Arkill', TO_DATE('12/08/1999''yyyy-mm-dd'));
-INSERT INTO persona VALUES ('96-8795930', 'Ev', 'Smith', 'Onians', TO_DATE('05/12/1989''yyyy-mm-dd'));
-INSERT INTO persona VALUES ('79-9657119', 'Xymenes', 'Ullyott', 'Joska', TO_DATE('07/20/1992''yyyy-mm-dd'));
-INSERT INTO persona VALUES ('79-9115120', 'Efrem', 'Bourthouloume', 'MacLardie', TO_DATE('02/10/2000''yyyy-mm-dd'));
-
+INSERT INTO persona (curp, nombre, apellido_p, apellido_m, fecha_nac) VALUES 
+('VSQM201028HFA15050', 'Mahala', 'Dilke', 'Thwaites', TO_DATE('2018-11-21 04:11:13', 'yyyy-mm-dd hh24:mi:ss'));
+INSERT INTO persona (curp, nombre, apellido_p, apellido_m, fecha_nac) VALUES 
+('KCHV151019HNC84099', 'Harriot', 'Meneghi', 'Kingerby', TO_DATE('2018-06-26 15:02:12', 'yyyy-mm-dd hh24:mi:ss'));
+INSERT INTO persona (curp, nombre, apellido_p, apellido_m, fecha_nac) VALUES 
+('WFRN500929HFE10460', 'Justinian', 'Ricca', 'Ismay', TO_DATE('2018-08-10 11:21:30', 'yyyy-mm-dd hh24:mi:ss'));
+INSERT INTO persona (curp, nombre, apellido_p, apellido_m, fecha_nac) VALUES 
+('WIOV691129MEP08990', 'Micaela', 'Angood', 'Tallboy', TO_DATE('2018-10-25 07:11:50', 'yyyy-mm-dd hh24:mi:ss'));
+INSERT INTO persona (curp, nombre, apellido_p, apellido_m, fecha_nac) VALUES 
+('KAZS260909MAN61507', 'Martina', 'Spuner', 'Paish', TO_DATE('2019-03-05 15:07:21', 'yyyy-mm-dd hh24:mi:ss'));
+INSERT INTO persona (curp, nombre, apellido_p, apellido_m, fecha_nac) VALUES 
+('LWXD841224HLO05262', 'Riki', 'Rigolle', 'Freear', TO_DATE('2018-12-28 04:30:44', 'yyyy-mm-dd hh24:mi:ss'));
+INSERT INTO persona (curp, nombre, apellido_p, apellido_m, fecha_nac) VALUES 
+('EUBH531008HTK38587', 'Timi', 'Burgoine', 'Woolgar', TO_DATE('2019-03-08 19:43:31', 'yyyy-mm-dd hh24:mi:ss'));
+INSERT INTO persona (curp, nombre, apellido_p, apellido_m, fecha_nac) VALUES 
+('BHZM661228HWK23877', 'Elisabetta', 'Saile', 'Dellatorre', TO_DATE('2019-04-08 03:48:34', 'yyyy-mm-dd hh24:mi:ss'));
+INSERT INTO persona (curp, nombre, apellido_p, apellido_m, fecha_nac) VALUES 
+('RWAU331229HRB67964', 'Margi', 'Pratley', 'Phipp', TO_DATE('2018-10-10 10:25:23', 'yyyy-mm-dd hh24:mi:ss'));
+INSERT INTO persona (curp, nombre, apellido_p, apellido_m, fecha_nac) VALUES 
+('TNAE291127HOC02613', 'Garrard', 'Krout', 'Mathiassen', TO_DATE('2018-08-01 01:38:28', 'yyyy-mm-dd hh24:mi:ss'));
 -- Empleados
 INSERT INTO empleado 
     SELECT curp, 'A', 'CAJERO' 
