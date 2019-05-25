@@ -43,32 +43,32 @@ INSERT INTO persona (curp, nombre, apellido_p, apellido_m, fecha_nac) VALUES
 ('TNAE291127HOC02613', 'Garrard', 'Krout', 'Mathiassen', TO_DATE('2018-08-01 01:38:28', 'yyyy-mm-dd hh24:mi:ss'));
 
 -- ========================================================================= --
--- 5. Empleados
+-- 5. Horario para empleado
 INSERT INTO horario
     SELECT tipo, 'CAJERO', '0480', '1933'
     FROM tipo_departamento;
 
 -- ========================================================================= -- 
--- 6.                                                                 
+-- 6. Horario para empleado                                                                
 INSERT INTO horario
     SELECT tipo, 'GERENTE', '0480', '1933'
     FROM tipo_departamento;        
 
 -- ========================================================================= --
--- 7.
+-- 7. Sueldo para empleado
 INSERT INTO sueldo
     SELECT id_tipo_dep, puesto, CURRENT_DATE, 10000
     FROM horario
     WHERE puesto = 'CAJERO';
 -- ========================================================================= --
--- 8.
+-- 8. Sueldo para empleado 2
 INSERT INTO sueldo
     SELECT id_tipo_dep, puesto, CURRENT_DATE, 20000
         FROM horario
         WHERE puesto = 'GERENTE';        
 
 -- ========================================================================= --                                                                
--- 9.
+-- 9. Empleados
 INSERT INTO empleado(curp, tipo_dep, puesto, registro) 
     SELECT curp, id_tipo_dep, puesto, registro
         FROM persona, (
@@ -134,11 +134,13 @@ DELETE FROM producto WHERE precio <= 6;
 -- ========================================================================= --
 -- 9. Eliminar empleados de tipo_dep = F de la sucursal mas nueva
 (SELECT MAX(fecha_func) FROM sucursal); --falta completar la tabla trabajar
-
+                                                       
 -- ========================================================================= --
 -- 10. Eliminar los sueldos que no corresponda a ningun empleado
-                                                      
-
+DELETE 
+    FROM sueldo 
+    WHERE puesto NOT IN 
+                       (SELECT DISTINCT puesto FROM sueldo NATURAL JOIN empleado);
 
 -- ========================================================================= --
 --                                UPDATE                                     --
@@ -179,7 +181,10 @@ UPDATE sucursal
   
 -- ========================================================================= --  
 -- 6. Modificar algun apellido
-
+UPDATE persona
+  SET apellido_p = 'Doe'
+  WHERE nombre IN ('John','Jane','Justinian');
+                                                       
 -- ========================================================================= --
 -- 7. Cambiar de departamento algun empleado
 
