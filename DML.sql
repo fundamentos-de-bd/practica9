@@ -83,7 +83,7 @@ INSERT INTO producto (codigo_barras, precio, cantidad, marca) VALUES(9270412946,
 INSERT INTO producto (codigo_barras, precio, cantidad, marca) VALUES(1867655713, 7.74, '1 kg', 'BSL');
 INSERT INTO producto (codigo_barras, precio, cantidad, marca) VALUES(3404510077, 9.96, '1 L', 'NASDAQ');
 INSERT INTO producto (codigo_barras, precio, cantidad, marca) VALUES(3569371542, 27.74, '3 kg', 'BSL');
-INSERT INTO producto (codigo_barras, precio, cantidad, marca) VALUES(3559348209, 3.93, '500 ml', 'NYSE');
+INSERT INTO producto (codigo_barras, precio, presentacion, cantidad, marca) VALUES(3559348209, 10.53, 'LATA', '500 ml', 'NYSE');
 INSERT INTO producto (codigo_barras, precio, cantidad, marca) VALUES(3198042307, 4.38, '100 gr', 'CACI');
 INSERT INTO producto (codigo_barras, precio, cantidad, marca) VALUES(1007783263, 6.26, '50 ml', 'GFNSL');
 INSERT INTO producto (codigo_barras, precio, cantidad, marca) VALUES(3447985732, 10.24, '500 gr', 'LIND');
@@ -92,55 +92,11 @@ INSERT INTO producto (codigo_barras, precio, cantidad, marca) VALUES(8102804929,
 INSERT INTO producto (codigo_barras, precio, cantidad, marca) VALUES(0232337489, 7.97, '375 ml', 'YEXT');
 
 
-
--- ========================================================================== --
---                                 DELETE                                     --
--- ========================================================================== --
-
--- 1. Eliminar el empleado con id_empelado = 4
-DELETE FROM empleado WHERE id_empleado = 4; 
-
--- ========================================================================= --
--- 2. Eliminar empleado que se hayan registrado durante el anio en curso
-DELETE FROM empleado WHERE EXTRACT(DAY FROM registro) = EXTRACT(DAY FROM CURRENT_DATE);
-
--- ========================================================================= --
--- 3. Eliminar productos que sean de la marca BSL
-DELETE FROM producto WHERE marca = 'BSL';
-
--- ========================================================================= --
--- 4. Eliminar departamento de la sucursal mas antigua
-DELETE FROM tener_departamento where id_tipo = 'VYL' AND id_suc = (SELECT id_sucursal
-                                                                   FROM sucursal 
-                                                                   WHERE fecha_func = (SELECT MIN(fecha_func)
-                                                                                       FROM sucursal));  
--- ========================================================================= --
--- 5. Eliminar sucursal mas antigua
-DELETE FROM sucursal WHERE fecha_func= (SELECT MIN(fecha_func) FROM sucursal);
-
--- ========================================================================= --
--- 6. Eliminar personas que no son empleados
-DELETE FROM persona WHERE not exists ( select curp from empleado where persona.curp = empleado.curp);
-
--- ========================================================================= --
--- 7. Eliminar empleado mas viejo con respecto a la edad
-DELETE FROM empleado WHERE curp = (SELECT curp FROM persona
-                                    WHERE fecha_nac = (SELECT MIN(fecha_nac) FROM persona));
-
--- ========================================================================= --                                    
--- 8. Eliminar productos con precio menor a 6
-DELETE FROM producto WHERE precio <= 6;
-
--- ========================================================================= --
--- 9. Eliminar empleados de tipo_dep = F de la sucursal mas nueva
-(SELECT MAX(fecha_func) FROM sucursal); --falta completar la tabla trabajar
-                                                       
--- ========================================================================= --
--- 10. Eliminar los sueldos que no corresponda a ningun empleado
-DELETE 
-    FROM sueldo 
-    WHERE puesto NOT IN 
-                       (SELECT DISTINCT puesto FROM sueldo NATURAL JOIN empleado);
+-- Poniendo a la venta algunos productos
+INSERT INTO instancia_producto(codigo_barras, id_produccion, id_departamento) VALUES(9270412946, 82300582851, 'F');
+INSERT INTO instancia_producto(codigo_barras, id_produccion, id_departamento) VALUES(9270412946, 96150094809, 'F');
+INSERT INTO instancia_producto(codigo_barras, id_produccion, id_departamento) VALUES(3559348209, 68093611616, 'F');
+INSERT INTO instancia_producto(codigo_barras, id_produccion, id_departamento) VALUES(3404510077, 48302947890, 'F');
 
 -- ========================================================================= --
 --                                UPDATE                                     --
@@ -162,7 +118,7 @@ UPDATE horario
   WHERE puesto = 'CAJERO';
 
 -- ========================================================================= --  
--- 3. Aumentar el sueldo de los cajeros 1000
+-- 3. Aumentar el sueldo de los cajeros en 10%
 UPDATE sueldo
   SET sueldo = (select 1.1*sueldo from sueldo)
   WHERE puesto = 'CAJERO';
@@ -186,14 +142,49 @@ UPDATE persona
   WHERE nombre IN ('John','Jane','Justinian');
                                                        
 -- ========================================================================= --
--- 7. Cambiar de departamento algun empleado
-
+-- 7. Cambiar al departamento de farmacia el empleado con identificador 1.
+-- Antes de actualizar la información de un empleado, hay que crear una nueva
+-- instancia de Sueldo. Esto está corregido en prácticas posteriores.
+INSERT INTO sueldo(id_tipo_dep, puesto, registro, sueldo)
+    SELECT 'F', puesto, registro, sueldo 
+    FROM (
+        SELECT * FROM sueldo NATURAL JOIN (
+            SELECT id_tipo_dep, puesto, registro
+            FROM empleado
+            WHERE id_empleado = 1
+        )
+    );
+    
+UPDATE empleado
+    SET id_tipo_dep = 'F'
+    WHERE id_empleado = 1;
 -- ========================================================================= --
--- 8. Aumentar el sueldo en un 10% a gerentes 
+-- 8. Aumentar el sueldo en $1000 a los empleados de Abarrotes 
+UPDATE sueldo
+    SET sueldo = sueldo+1000
+    WHERE id_tipo_dep = 'A';
 -- ========================================================================= --
--- 9.                                                       
+-- 9. Hacer que todos los productos de lata cuyo precio sea mayor al precio
+-- promedio de todos los produtos sean refrigerados.
+UPDATE producto
+    SET es_refrigerado = 1
+    WHERE codigo_barras IN (
+        SELECT codigo_barras 
+            FROM producto
+            WHERE precio > AVG(precio) AND UPPER(presentacion) LIKE 'LATA'
+    );
 -- ========================================================================= --
--- 10.                                                      
+-- 10. Aumentar en 10% el precio de todos los productos cuya unidad de cantidad
+-- sea mililitros o litros, su presentación no sea de lata y que estén a la
+-- venta en el departamento de farmacia
+UPDATE producto
+    SET precio = precio*1.1
+    WHERE UPPER(cantidad) LIKE '%L' AND UPPER(presentacion) NOT LIKE 'LATA'
+    AND codigo_barras IN (
+        SELECT codigo_barras
+        FROM instancia_producto
+        WHERE id_tipo_dep LIKE 'F'
+    );
 
 -- ========================================================================= --
 --                              CONSULTAS                                    --
@@ -233,17 +224,17 @@ SELECT nombre, ((CURRENT_DATE - fecha_nac)/365.25) edad, num_trabajos
 -- regresar el identificados de la sucursal, seguido del identificador del producto y
 -- la descripcion de este.
 -- Nota: hay que cambiar el esquema para poder hacer esta consulta.
-SELECT id_sucursal, id_producto, descripciÃ³n
+SELECT id_sucursal, id_producto, descripcion
     FROM instancia_producto
-    GROUP BY id_sucursal, id_producto;
+    ORDER BY id_sucursal, id_producto;
 
 -- ========================================================================= --
 -- 5. Conocer cuales son TODOS los productos que se tienen en cada uno de los
 -- departamentos de las diferentes sucursales.
 SELECT id_producto, id_departamento
     FROM instancia_producto
-    GROUP BY id_departamento
-    WHERE id_departamento NOT NULL;
+    WHERE id_departamento IS NOT NULL
+    ORDER BY id_departamento;
 
 -- ========================================================================= --
 -- 6. Conocer cuál es la sucursal con mayor número de productos registrados en sus
@@ -253,3 +244,51 @@ SELECT id_sucursal, MAX(COUNT(id_producto))
     FROM instancia_producto
     GROUP BY id_sucursal;
 
+-- ========================================================================== --
+--                                 DELETE                                     --
+-- ========================================================================== --
+
+-- 1. Eliminar el empleado con id_empelado = 4
+DELETE FROM empleado WHERE id_empleado = 4; 
+
+-- ========================================================================= --
+-- 2. Eliminar los sueldos que no corresponda a ningun empleado
+DELETE 
+    FROM sueldo 
+    WHERE puesto NOT IN 
+                       (SELECT DISTINCT puesto FROM sueldo NATURAL JOIN empleado);
+
+-- ========================================================================= --
+-- 3. Eliminar productos que sean de la marca BSL
+DELETE FROM producto WHERE marca = 'BSL';
+
+-- ========================================================================= --
+-- 4. Eliminar departamento de la sucursal mas antigua
+DELETE FROM tener_departamento where id_tipo = 'VYL' AND id_suc = (SELECT id_sucursal
+                                                                   FROM sucursal 
+                                                                   WHERE fecha_func = (SELECT MIN(fecha_func)
+                                                                                       FROM sucursal));  
+-- ========================================================================= --
+-- 5. Eliminar sucursal mas antigua
+DELETE FROM sucursal WHERE fecha_func= (SELECT MIN(fecha_func) FROM sucursal);
+
+-- ========================================================================= --
+-- 6. Eliminar personas que no son empleados
+DELETE FROM persona WHERE NOT EXISTS ( SELECT curp FROM empleado WHERE persona.curp = empleado.curp);
+
+-- ========================================================================= --
+-- 7. Eliminar empleado mas viejo con respecto a la edad
+DELETE FROM empleado WHERE curp = (SELECT curp FROM persona
+                                    WHERE fecha_nac = (SELECT MIN(fecha_nac) FROM persona));
+
+-- ========================================================================= --                                    
+-- 8. Eliminar productos con precio menor a 6
+DELETE FROM producto WHERE precio <= 6;
+
+-- ========================================================================= --
+-- 9. Eliminar empleados de tipo_dep = F de la sucursal mas nueva
+(SELECT MAX(fecha_func) FROM sucursal); --falta completar la tabla trabajar
+                                                       
+-- ========================================================================= --
+-- 10. Eliminar empleado que se hayan registrado durante el anio en curso
+DELETE FROM empleado WHERE EXTRACT(YEAR FROM registro) = EXTRACT(YEAR FROM CURRENT_DATE);

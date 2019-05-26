@@ -3,7 +3,7 @@ CREATE TABLE producto (
     codigo_barras NUMBER(20),
     precio NUMBER(10) DEFAULT 0,
     presentacion VARCHAR(100),
-    cantidad NUMBER(10) DEFAULT 0,
+    cantidad VARCHAR(10) DEFAULT 0,
     es_refrigerado NUMBER(1) DEFAULT 0,
     marca VARCHAR(100) NOT NULL
 );
@@ -432,13 +432,13 @@ ALTER TABLE canjear_ticket
     REFERENCES cliente(id_cliente)
     ON DELETE CASCADE;
    
--- Creando tabla para la relaci�n de Instancia Producto
+-- Creando tabla para la relacion de Instancia Producto
 CREATE TABLE instancia_producto (
     id_producto NUMBER(10) GENERATED ALWAYS AS IDENTITY,
     codigo_barras NUMBER(20) NOT NULL,
     id_produccion NUMBER(10),
     id_departamento VARCHAR(100),
-    id_venta NUMBER(10) NOT NULL,
+    id_venta NUMBER(10),
     descripcion VARCHAR(100)
 );
 
