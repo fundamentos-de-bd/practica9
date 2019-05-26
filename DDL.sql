@@ -438,6 +438,7 @@ CREATE TABLE instancia_producto (
     codigo_barras NUMBER(20) NOT NULL,
     id_produccion NUMBER(10),
     id_departamento VARCHAR(100),
+    id_sucursal NUMBER(10),
     id_venta NUMBER(10),
     descripcion VARCHAR(100)
 );
@@ -451,6 +452,12 @@ ALTER TABLE instancia_producto
     FOREIGN KEY (codigo_barras)
     REFERENCES producto(codigo_barras)
     ON DELETE CASCADE;
+    
+ALTER TABLE instancia_producto
+    ADD CONSTRAINT fk_suc_inst_prod
+    FOREIGN KEY (id_sucursal)
+    REFERENCES sucursal(id_sucursal)
+    ON DELETE SET NULL;
     
 ALTER TABLE instancia_producto
     ADD CONSTRAINT fk_id_produc_inst_prod
